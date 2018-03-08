@@ -1,0 +1,28 @@
+/* This file is for your main application css. */
+
+@import "bootstrap";
+
+.dgButtons{
+    height: 50px;
+    width: 50px;
+    margin-left: 0px;
+    margin-right: 0px;
+    background-color: darkgreen;
+}
+
+.lgButtons{
+    height: 50px;
+    width: 50px;
+    margin-left: 0px;
+    margin-right: 0px;
+    padding: 0%;
+    background-color: lightgreen;
+}
+
+.rowLetter{
+    font-size: 40px;
+    margin-right: 20px;
+}
+.colLetter{
+    font-size: 15px;
+}
