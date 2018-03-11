@@ -11,16 +11,7 @@
 //
 // If you no longer want to use a dependency, remember
 // to also remove its path from "config.paths.watched".
-import "phoenix_html"
-import run_othello from "./othello";
-
-function init() {
-  let root = document.getElementById('root');
-  run_othello(root);
-}
-
-// Use jQuery to delay until page loaded.
-$(init);
+import "phoenix_html";
 
 // Import local files
 //
@@ -28,3 +19,20 @@ $(init);
 // paths "./socket" or full ones "web/static/js/socket".
 
 // import socket from "./socket"
+import socket from "./socket";
+
+import game_init from "./othello";
+
+function start() {
+  let root = document.getElementById('game');
+  if (root) {
+    let channel = socket.channel("games:" + window.gameName, {});
+    game_init(root, channel);
+  }
+
+  if (document.getElementById('index-page')) {
+    form_init();
+  }
+}
+
+$(start);

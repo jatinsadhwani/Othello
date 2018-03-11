@@ -3,8 +3,8 @@ import ReactDOM from 'react-dom';
 import { Button } from 'reactstrap';
 import classnames from 'classnames';
 
-export default function run_othello(root, channel) {
-  ReactDOM.render(<Othello />, root);
+export default function game_init(root, channel) {
+  ReactDOM.render(<Othello channel={channel} />, root);
 }
 
 function getTiles() {
@@ -29,11 +29,26 @@ class Othello extends React.Component{
     
     constructor(props) {
         super(props);
+        this.channel = props.channel;
         this.state = {
           tiles: getTiles(),
+          is_player1: true,
           p1_score : 0,
           p2_score : 0
         };
+
+        this.channel.join()
+                .receive("ok", this.getView.bind(this))
+                .receive("error", resp => { console.log("Unable to join", resp)});
+    }
+
+    getView(view) {
+    this.setState(view.game);
+    }
+
+    playing(tile) {
+    this.channel.push("tile", {tile})
+                        .receive("ok", this.getView.bind(this));
     }
 
     renderTile(tile) {
@@ -43,7 +58,7 @@ class Othello extends React.Component{
     });
     
     return (
-            <Button className="lgButtons">
+            <Button className="lgButtons" onClick={()=>this.playing(tile)}>
               {(<h4 className={cls}></h4>)}
             </Button>
           );
