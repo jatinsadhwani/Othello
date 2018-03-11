@@ -1,136 +1,140 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Button } from 'reactstrap';
+import classnames from 'classnames';
 
 export default function run_othello(root, channel) {
   ReactDOM.render(<Othello />, root);
 }
 
-class Othello extends React.Component{
-    constructor(props) {
-        super(props);
-        this.state = {
-          p1_score : 0,
-          p2_score : 0
-        };
-      }
+function getTiles() {
+  
+  var tiles = [];
+  for (var i=0; i < 64; i++) {
+    tiles.push({ index: i,
+                 val: 0,
+               })
+  }
 
+ tiles[27].val = 1;
+ tiles[28].val = 2;
+ tiles[36].val = 1;
+ tiles[35].val = 2;
 
-      render(){
-        return(
-            <div className="container">
-                <div className="row">
-                    <p className="rowLetter"> </p>
-                    <p className="rowLetter">A</p>
-                    <p className="rowLetter">B</p>
-                    <p className="rowLetter">C</p>
-                    <p className="rowLetter">D</p>
-                    <p className="rowLetter">E</p>
-                    <p className="rowLetter">F</p>
-                    <p className="rowLetter">G</p>
-                    <p className="rowLetter">H</p>
-                </div>
-                <div className="row">
-                        <p className="colLetter">1</p>
-                        <DarkButtons root={this}/>
-                        <LightButtons root={this}/>
-                        <DarkButtons root={this}/>
-                        <LightButtons root={this}/>
-                        <DarkButtons root={this}/>
-                        <LightButtons root={this}/>
-                        <DarkButtons root={this}/>
-                        <LightButtons root={this}/>
-                </div>
-                <div className="row">
-                        <p className="colLetter">2</p>
-                        <LightButtons root={this}/>
-                        <DarkButtons root={this}/>
-                        <LightButtons root={this}/>
-                        <DarkButtons root={this}/>
-                        <LightButtons root={this}/>
-                        <DarkButtons root={this}/>
-                        <LightButtons root={this}/>
-                        <DarkButtons root={this}/>
-                </div>
-                <div className="row">
-                        <p className="colLetter">3</p>
-                        <DarkButtons root={this}/>
-                        <LightButtons root={this}/>
-                        <DarkButtons root={this}/>
-                        <LightButtons root={this}/>
-                        <DarkButtons root={this}/>
-                        <LightButtons root={this}/>
-                        <DarkButtons root={this}/>
-                        <LightButtons root={this}/>
-                </div>
-                <div className="row">
-                        <p className="colLetter">4</p>
-                        <LightButtons root={this}/>
-                        <DarkButtons root={this}/>
-                        <LightButtons root={this}/>
-                        <DarkButtons root={this}/>
-                        <LightButtons root={this}/>
-                        <DarkButtons root={this}/>
-                        <LightButtons root={this}/>
-                        <DarkButtons root={this}/>
-                </div>
-                <div className="row">
-                        <p className="colLetter">5</p>
-                        <DarkButtons root={this}/>
-                        <LightButtons root={this}/>
-                        <DarkButtons root={this}/>
-                        <LightButtons root={this}/>
-                        <DarkButtons root={this}/>
-                        <LightButtons root={this}/>
-                        <DarkButtons root={this}/>
-                        <LightButtons root={this}/>
-                </div>
-                <div className="row">
-                        <p className="colLetter">6</p>
-                        <LightButtons root={this}/>
-                        <DarkButtons root={this}/>
-                        <LightButtons root={this}/>
-                        <DarkButtons root={this}/>
-                        <LightButtons root={this}/>
-                        <DarkButtons root={this}/>
-                        <LightButtons root={this}/>
-                        <DarkButtons root={this}/>
-                </div>
-                <div className="row">
-                        <p className="colLetter">7</p>
-                        <DarkButtons root={this}/>
-                        <LightButtons root={this}/>
-                        <DarkButtons root={this}/>
-                        <LightButtons root={this}/>
-                        <DarkButtons root={this}/>
-                        <LightButtons root={this}/>
-                        <DarkButtons root={this}/>
-                        <LightButtons root={this}/>
-                </div>
-                <div className="row">
-                        <p className="colLetter">8</p>
-                        <LightButtons root={this}/>
-                        <DarkButtons root={this}/>
-                        <LightButtons root={this}/>
-                        <DarkButtons root={this}/>
-                        <LightButtons root={this}/>
-                        <DarkButtons root={this}/>
-                        <LightButtons root={this}/>
-                        <DarkButtons root={this}/>
-                </div>
-            </div>
-        );
-      }
+ return tiles;
 
 }
 
+class Othello extends React.Component{
+    
+    constructor(props) {
+        super(props);
+        this.state = {
+          tiles: getTiles(),
+          p1_score : 0,
+          p2_score : 0
+        };
+    }
 
-function DarkButtons(params){
-    let root = params.root;
-    return(<Button className="dgButtons"></Button>);
-  }
+    renderTile(tile) {
+    var cls = classnames({
+      'disc-wh': tile.val == 2,
+      'disc-bl': tile.val == 1
+    });
+    
+    return (
+            <Button className="lgButtons">
+              {(<h4 className={cls}></h4>)}
+            </Button>
+          );
+    }
 
-  function LightButtons(params){
-    let root = params.root;
-    return(<Button className="lgButtons"></Button>);
-  }
+
+      render(){
+        var tiles = this.state.tiles;
+        return(
+            <div className="container board">
+                <div className="card-deck">
+                  {this.renderTile(tiles[0])}
+                  {this.renderTile(tiles[1])}
+                  {this.renderTile(tiles[2])}
+                  {this.renderTile(tiles[3])}
+                  {this.renderTile(tiles[4])}
+                  {this.renderTile(tiles[5])}
+                  {this.renderTile(tiles[6])}
+                  {this.renderTile(tiles[7])}
+                </div>
+                <div className="card-deck" >
+                  {this.renderTile(tiles[8])}
+                  {this.renderTile(tiles[9])}
+                  {this.renderTile(tiles[10])}
+                  {this.renderTile(tiles[11])}
+                  {this.renderTile(tiles[12])}
+                  {this.renderTile(tiles[13])}
+                  {this.renderTile(tiles[14])}
+                  {this.renderTile(tiles[15])}
+                </div>
+                <div className="card-deck">
+                  {this.renderTile(tiles[16])}
+                  {this.renderTile(tiles[17])}
+                  {this.renderTile(tiles[18])}
+                  {this.renderTile(tiles[19])}
+                  {this.renderTile(tiles[20])}
+                  {this.renderTile(tiles[21])}
+                  {this.renderTile(tiles[22])}
+                  {this.renderTile(tiles[23])}
+                </div>
+                <div className="card-deck">
+                  {this.renderTile(tiles[24])}
+                  {this.renderTile(tiles[25])}
+                  {this.renderTile(tiles[26])}
+                  {this.renderTile(tiles[27])}
+                  {this.renderTile(tiles[28])}
+                  {this.renderTile(tiles[29])}
+                  {this.renderTile(tiles[30])}
+                  {this.renderTile(tiles[31])}
+                </div>
+                <div className="card-deck">
+                  {this.renderTile(tiles[32])}
+                  {this.renderTile(tiles[33])}
+                  {this.renderTile(tiles[34])}
+                  {this.renderTile(tiles[35])}
+                  {this.renderTile(tiles[36])}
+                  {this.renderTile(tiles[37])}
+                  {this.renderTile(tiles[38])}
+                  {this.renderTile(tiles[39])}
+                </div>
+                <div className="card-deck" >
+                  {this.renderTile(tiles[40])}
+                  {this.renderTile(tiles[41])}
+                  {this.renderTile(tiles[42])}
+                  {this.renderTile(tiles[43])}
+                  {this.renderTile(tiles[44])}
+                  {this.renderTile(tiles[45])}
+                  {this.renderTile(tiles[46])}
+                  {this.renderTile(tiles[47])}
+                </div>
+                <div className="card-deck">
+                  {this.renderTile(tiles[48])}
+                  {this.renderTile(tiles[49])}
+                  {this.renderTile(tiles[50])}
+                  {this.renderTile(tiles[51])}
+                  {this.renderTile(tiles[52])}
+                  {this.renderTile(tiles[53])}
+                  {this.renderTile(tiles[54])}
+                  {this.renderTile(tiles[55])}
+                </div>
+                <div className="card-deck">
+                  {this.renderTile(tiles[56])}
+                  {this.renderTile(tiles[57])}
+                  {this.renderTile(tiles[58])}
+                  {this.renderTile(tiles[59])}
+                  {this.renderTile(tiles[60])}
+                  {this.renderTile(tiles[61])}
+                  {this.renderTile(tiles[62])}
+                  {this.renderTile(tiles[63])}
+                </div>
+            </div>
+        );
+    }
+}

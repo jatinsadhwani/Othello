@@ -2,6 +2,10 @@
 
 @import "bootstrap";
 
+h1 {
+    text-align: center;
+}
+
 .dgButtons{
     height: 50px;
     width: 50px;
@@ -20,9 +24,59 @@
 }
 
 .rowLetter{
-    font-size: 40px;
+    font-size: 15px;
     margin-right: 20px;
 }
 .colLetter{
     font-size: 15px;
+}
+
+.disc-bl {
+    background-color:black;
+    border-radius: 100%;
+    width:100%;
+    height:100%;
+}
+
+.board {
+    width: 100%;
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-top: 10%;
+    margin-right: 20%;
+    margin-left: 30%;
+}
+
+.disc-wh {
+    background-color:white;
+    border-radius: 100%;
+    width:100%;
+    height:100%;
+}
+
+.card-deck .card {
+    margin-bottom: 5px;
+    margin-right: 5px;
+    height: 50px;
+    background-color: Grey;
+}
+
+.card-title {
+    text-align: center;
+    line-height: 2;
+}
+
+.matched {
+    background-color: White;
+    text-align: center;
+    line-height: 2;
+}
+
+.row {
+    margin-left: 5px;
+    margin-top: 5px;
+}
+
+.rightCol {
+    float: right;
 }
