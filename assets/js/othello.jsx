@@ -16,11 +16,10 @@ function getTiles() {
                })
   }
 
- tiles[27].val = 1;
- tiles[28].val = 2;
- tiles[36].val = 1;
- tiles[35].val = 2;
-
+ tiles[27].val = 2;
+ tiles[28].val = 1;
+ tiles[36].val = 2;
+ tiles[35].val = 1;
  return tiles;
 
 }
@@ -52,6 +51,11 @@ class Othello extends React.Component{
     }
 
     renderTile(tile) {
+    console.log(tile);
+    if(tile.index == 27 || tile.index == 28 || tile.index == 35 || tile.index == 36)
+    {
+        console.log(tile.index, tile.val);
+    }
     var cls = classnames({
       'disc-wh': tile.val == 2,
       'disc-bl': tile.val == 1
