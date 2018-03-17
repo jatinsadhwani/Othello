@@ -4,8 +4,9 @@ defmodule Othello.Game do
     %{
       tiles: getTiles(),
       is_player1: true,
-      p1_score: 0,
-      p2_score: 0,
+      p1_score: 2,
+      p2_score: 2,
+      winner: 0,
     }
   end
   
@@ -15,6 +16,7 @@ defmodule Othello.Game do
       is_player1: game.is_player1,
       p1_score: game.p1_score,
       p2_score: game.p2_score,
+      winner: game.winner,
     }
   end
 
@@ -53,10 +55,21 @@ defmodule Othello.Game do
   end
 
   def attack(state, []) do
-    state = state
+    p1_score = state.p1_score
+    p2_score = state.p2_score
+    is_player1 = state.is_player1
+    if state.is_player1 do
+      p1_score = p1_score + 1
+    else
+      p2_score = p2_score + 1
+    end
+    state = Map.put(state, :p1_score, p1_score)
+    state = Map.put(state, :p2_score, p2_score)
   end
 
   def attack(state, [h | rest]) do
+    p1_score = state.p1_score
+    p2_score = state.p2_score
     is_player1 = state.is_player1
     if state.is_player1 do
       val = 1
@@ -66,8 +79,18 @@ defmodule Othello.Game do
     tiles = state.tiles
     i = h[:index]
     z = Map.put(Enum.at(tiles, i), :val, val)
+    if val == 1 do
+      p1_score = p1_score + 1
+      p2_score = p2_score - 1
+    else
+      p1_score = p1_score - 1
+      p2_score = p2_score + 1
+    end
+
     tiles = List.update_at(tiles, i, fn(t) -> t = z end)
     state = Map.put(state, :tiles, tiles)
+    state = Map.put(state, :p1_score, p1_score)
+    state = Map.put(state, :p2_score, p2_score)
     attack(state, rest)       
   end
 
@@ -195,6 +218,41 @@ defmodule Othello.Game do
     end
   end
 
+  def checkWinner(state) do
+    p1_score = state.p1_score
+    p2_score = state.p2_score
+    total = p1_score + p2_score
+    cond do
+      p1_score == 0 -> true
+      p2_score == 0 -> true
+      total == 64 -> true  
+      true -> false
+    end
+  end 
+
+  def getWinner(state) do
+    p1_score = state.p1_score
+    p2_score = state.p2_score
+    if p1_score == 0 do
+      w = 2
+    else
+      if p2_score == 0 do
+        w = 1
+      else 
+        if p1_score > p2_score do
+          w = 1
+        else
+          w = 2
+        end 
+      end 
+    end
+
+    w
+  end   
+
+
+
+
   def playing(state, tile) do
     tiles = state.tiles
     is_player1 = state.is_player1
@@ -216,6 +274,12 @@ defmodule Othello.Game do
         visitedTiles = List.flatten(getVisitedTiles(enemies, tile, tiles, val, visitedTiles))
         state = attack(state, visitedTiles)
         tiles = state.tiles
+        x = checkWinner(state)
+        if x == true do
+          w = getWinner(state)
+        else
+          w=0 
+        end
         i = tile["index"]
         if is_player1 == true do
           z = Map.put(Enum.at(tiles, i), :val, 1)
@@ -223,13 +287,15 @@ defmodule Othello.Game do
           tiles = List.insert_at(tiles, i , z) 
           state = Map.put(state, :tiles, tiles)
           state = Map.put(state, :is_player1, false)
+          state = Map.put(state, :winner, w)
         else
           y = Map.put(Enum.at(tiles, i), :val, 2)
           tiles = List.delete_at(tiles, i)
           tiles = List.insert_at(tiles, i , y) 
           state = Map.put(state, :tiles, tiles)
           state = Map.put(state, :is_player1, true)
-        end
+          state = Map.put(state, :winner, w)
+        end 
       else
         state = state
       end

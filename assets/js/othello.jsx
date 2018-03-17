@@ -32,8 +32,8 @@ class Othello extends React.Component{
         this.state = {
           tiles: getTiles(),
           is_player1: true,
-          p1_score : 0,
-          p2_score : 0
+          p1_score : 2,
+          p2_score : 2
         };
 
         this.channel.join()
@@ -48,6 +48,11 @@ class Othello extends React.Component{
     playing(tile) {
     this.channel.push("tile", {tile})
                         .receive("ok", this.getView.bind(this));
+    }
+
+    reset(){
+      this.channel.push("restart",)
+                        .receive("ok",this.getView.bind(this))
     }
 
     renderTile(tile) {
@@ -66,6 +71,14 @@ class Othello extends React.Component{
               {(<h4 className={cls}></h4>)}
             </Button>
           );
+    }
+
+    renderResetButton(){
+      return (
+        <Button className="resetButtons" onClick={()=>this.reset()}>
+          Reset Game
+        </Button>
+      );
     }
 
 
@@ -153,6 +166,23 @@ class Othello extends React.Component{
                   {this.renderTile(tiles[62])}
                   {this.renderTile(tiles[63])}
                 </div>
+                <div className="reset">
+                  {this.renderResetButton()}
+                </div>
+
+                <div className="whiteScore">
+                  <p>Black Score - {this.state.p1_score}</p>
+                </div>
+
+                <div className="whiteScore">
+                  <p>White Score - {this.state.p2_score}</p>
+                </div>
+
+                <div className = "Winner">
+                  <p>Winner is - {this.state.winner} </p>
+                </div>
+
+
             </div>
         );
     }
