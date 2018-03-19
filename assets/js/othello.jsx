@@ -32,8 +32,10 @@ class Othello extends React.Component{
         this.state = {
           tiles: getTiles(),
           is_player1: true,
-          p1_score : 2,
-          p2_score : 2
+          p1_score: 2,
+          p2_score: 2,
+          pos1: true,
+          pos2: true
         };
 
         this.channel.join()
@@ -56,11 +58,6 @@ class Othello extends React.Component{
     }
 
     renderTile(tile) {
-    console.log(tile);
-    if(tile.index == 27 || tile.index == 28 || tile.index == 35 || tile.index == 36)
-    {
-        console.log(tile.index, tile.val);
-    }
     var cls = classnames({
       'disc-wh': tile.val == 2,
       'disc-bl': tile.val == 1
@@ -169,7 +166,6 @@ class Othello extends React.Component{
                 <div className="reset">
                   {this.renderResetButton()}
                 </div>
-
                 <div className="whiteScore">
                   <p>Black Score - {this.state.p1_score}</p>
                 </div>

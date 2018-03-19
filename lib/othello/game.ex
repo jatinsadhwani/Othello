@@ -7,6 +7,8 @@ defmodule Othello.Game do
       p1_score: 2,
       p2_score: 2,
       winner: 0,
+      pos1: true,
+      pos2: true
     }
   end
   
@@ -17,6 +19,8 @@ defmodule Othello.Game do
       p1_score: game.p1_score,
       p2_score: game.p2_score,
       winner: game.winner,
+      pos1: game.pos1,
+      pos2: game.pos2
     }
   end
 
@@ -95,7 +99,12 @@ defmodule Othello.Game do
   end
 
   def getAdjacentEnemies(tile, tiles, val) do
-    i = tile["index"]
+    if tile["index"] == nil do
+      i = tile[:index]
+    else
+      i = tile["index"]
+    end
+
     adjacentTiles = []
   
     if (i-1) >= 0 && rem(i-1, 8) != 7 do
@@ -149,8 +158,9 @@ defmodule Othello.Game do
 
     d = i - enemy[:index]
     alt = enemy[:index] - d
+    e = enemy[:index]
     altTile = %{}
-    if alt < 0 || alt > 63 do
+    if alt < 0 || alt > 63 || ((rem(e, 8) == 0 || rem(e, 8) == 7) && d in [1, -1, 7, -7, 9, -9]) do
       altTile = %{}
     else
       altTile = Enum.at(tiles, alt)
@@ -188,8 +198,9 @@ defmodule Othello.Game do
 
     d = i - enemy[:index]
     alt = enemy[:index] - d
+    e = enemy[:index]
     altTile = %{}
-    if alt < 0 || alt > 63 do
+    if alt < 0 || alt > 63 || ((rem(e, 8) == 0 || rem(e, 8) == 7) && d in [1, -1, 7, -7, 9, -9]) do
       altTile = %{}
     else
       altTile = Enum.at(tiles, alt)
@@ -197,7 +208,7 @@ defmodule Othello.Game do
 
     altval = altTile[:val]
 
-    if altval == 0 do
+    if altval == 0 || altval == nil do
       visitedTiles = []
     else
       if altval == enemy[:val] do
@@ -250,8 +261,13 @@ defmodule Othello.Game do
     w
   end   
 
-
-
+  def ismovePossible(state, val) do
+    tiles = state.tiles
+    emptyTiles = Enum.filter(tiles, fn(t) -> t[:val] == 0 end)
+    x = for tile <- emptyTiles do
+          isAttacking(tile, tiles, val)
+        end
+  end
 
   def playing(state, tile) do
     tiles = state.tiles
@@ -261,46 +277,81 @@ defmodule Othello.Game do
     else
       val = 2
     end
-    if tile["val"] == 0 do
-      if is_list(isAttacking(tile, tiles, val)) do
-        a = isAttacking(tile, tiles, val)
-        a = List.first(a)
-      else
-        a = isAttacking(tile, tiles, val)
-      end
-      if a == true do
+
+    pos1 = true in ismovePossible(state, 1)
+    pos2 = true in ismovePossible(state, 2)
+
+    if tile["val"] == 0 && (pos1 ||  pos2) do
+      a = isAttacking(tile, tiles, val)
+      if a do
         enemies = getAdjacentEnemies(tile, tiles, val)
         visitedTiles = []
         visitedTiles = List.flatten(getVisitedTiles(enemies, tile, tiles, val, visitedTiles))
         state = attack(state, visitedTiles)
         tiles = state.tiles
         x = checkWinner(state)
-        if x == true do
+        if x do
           w = getWinner(state)
         else
           w=0 
         end
         i = tile["index"]
-        if is_player1 == true do
-          z = Map.put(Enum.at(tiles, i), :val, 1)
-          tiles = List.delete_at(tiles, i)
-          tiles = List.insert_at(tiles, i , z) 
-          state = Map.put(state, :tiles, tiles)
-          state = Map.put(state, :is_player1, false)
-          state = Map.put(state, :winner, w)
+        if is_player1 do
+          if pos1 do
+            z = Map.put(Enum.at(tiles, i), :val, 1)
+            tiles = List.delete_at(tiles, i)
+            tiles = List.insert_at(tiles, i , z) 
+            state = Map.put(state, :tiles, tiles)
+            state = Map.put(state, :is_player1, false)
+            state = Map.put(state, :winner, w)
+            state = Map.put(state, :pos1, pos1)
+          else
+            state = Map.put(state, :is_player1, false)
+            state = Map.put(state, :pos1, false)
+          end
         else
-          y = Map.put(Enum.at(tiles, i), :val, 2)
-          tiles = List.delete_at(tiles, i)
-          tiles = List.insert_at(tiles, i , y) 
-          state = Map.put(state, :tiles, tiles)
-          state = Map.put(state, :is_player1, true)
-          state = Map.put(state, :winner, w)
+          if pos2 do
+            y = Map.put(Enum.at(tiles, i), :val, 2)
+            tiles = List.delete_at(tiles, i)
+            tiles = List.insert_at(tiles, i , y) 
+            state = Map.put(state, :tiles, tiles)
+            state = Map.put(state, :is_player1, true)
+            state = Map.put(state, :winner, w)
+            state = Map.put(state, :pos2, pos2)
+          else
+            state = Map.put(state, :is_player1, true)
+            state = Map.put(state, :pos2, false)
+          end
         end 
       else
-        state = state
+        if is_player1 do
+          if pos1 do
+            state = Map.put(state, :pos1, pos1)
+          else
+            state = Map.put(state, :is_player1, false)
+            state = Map.put(state, :pos1, false)
+          end
+        else
+          if pos2 do
+            state = Map.put(state, :pos2, pos2)
+          else
+            state = Map.put(state, :is_player1, true)
+            state = Map.put(state, :pos2, false)
+          end
+        end
       end
     else
-      state = state   
+      if tile["val"] != 0 do
+        if !pos1 && !pos2 do
+          w = getWinner(state)
+          state = Map.put(state, :winner, w)
+        else
+          state = state
+        end 
+      else
+        w = getWinner(state)
+        state = Map.put(state, :winner, w)
+      end
     end  
   end
 end
