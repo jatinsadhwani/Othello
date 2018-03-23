@@ -24,14 +24,22 @@ function getTiles() {
 
 }
 
+
 class Othello extends React.Component{
-    
+     
     constructor(props) {
         super(props);
         this.channel = props.channel;
+        this.player_id;
+        this.playername;
+        this.flag=0;
         this.state = {
           tiles: getTiles(),
           is_player1: true,
+          player1: null,
+          player2: null,
+          spectators: [],
+          player_count: 0,
           p1_score: 2,
           p2_score: 2,
           pos1: true,
@@ -48,13 +56,20 @@ class Othello extends React.Component{
     }
 
     playing(tile) {
-    this.channel.push("tile", {tile})
+    this.channel.push("tile", {tile: tile, id: this.player_id})
                         .receive("ok", this.getView.bind(this));
     }
 
     reset(){
       this.channel.push("restart",)
-                        .receive("ok",this.getView.bind(this))
+                        .receive("ok",this.getView.bind(this));
+    }
+
+    playerJoin(){
+      this.player_id = this.state.player_count + 1;
+      this.flag = 1;
+      this.channel.push("playerupdate",{playername: this.playername, player_count: this.state.player_count + 1})
+                        .receive("ok",this.getView.bind(this));
     }
 
     renderTile(tile) {
@@ -64,7 +79,7 @@ class Othello extends React.Component{
     });
     
     return (
-            <Button className="lgButtons" onClick={()=>this.playing(tile)}>
+            <Button className="lgButtons" onClick={()=>this.playing(tile, this.id)}>
               {(<h4 className={cls}></h4>)}
             </Button>
           );
@@ -77,6 +92,15 @@ class Othello extends React.Component{
         </Button>
       );
     }
+
+    updatePlayerValue(ev){
+      if(this.flag==0){
+        this.playername = ev.target.value;
+      }
+    }
+
+    
+
 
 
       render(){
@@ -178,6 +202,29 @@ class Othello extends React.Component{
                   <p>Winner is - {this.state.winner} </p>
                 </div>
 
+                <div className = "Player1" >
+                  <p>Player 1 - {this.state.player1}</p>
+                </div>
+
+                <div className = "Player2" >
+                  <p>Player 2 - {this.state.player2}</p>
+                </div>
+
+              <div className = "myname" >
+                  <p>My name - {this.playername}</p>
+              </div>
+
+              <div className = "myid" >
+                  <p>My ID - {this.player_id}</p>
+              </div>
+
+                <div>
+                  <input type="text" onChange={(ev) => this.updatePlayerValue(ev)} name="playername"/>
+                </div>
+
+                <div>
+                <Button className = "playerJoin" onClick = {() => this.playerJoin()} >Join Game</Button>
+                </div>
 
             </div>
         );
