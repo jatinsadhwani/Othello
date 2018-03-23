@@ -43,7 +43,8 @@ class Othello extends React.Component{
           p1_score: 2,
           p2_score: 2,
           pos1: true,
-          pos2: true
+          pos2: true,
+          alert_message: " ",
         };
 
         this.channel.join()
@@ -59,12 +60,14 @@ class Othello extends React.Component{
       this.setState({pos2: msg.pos2})
       this.setState({winner: msg.winner})
       this.setState({p1_score: msg.p1_score})
+      this.setState({alert_message: msg.alert_message})
       this.setState({p2_score: msg.p2_score})
     });
 
     this.channel.on("PlayerJoined", msg =>{
       this.setState({player1: msg.player1})
       this.setState({player2: msg.player2})
+      this.setState({alert_message: msg.alert_message})
       this.setState({player_count: msg.player_count})
     });
 
@@ -257,6 +260,11 @@ class Othello extends React.Component{
                 <div className = "Player2" >
                   <p>Player 2 - {this.state.player2}</p>
                 </div>
+
+                <div className = "Alert" >
+                  <p>Alert Message - {this.state.alert_message}</p>
+                </div>
+                
 
               <div className = "myname" >
                   <p>My name - {this.playername}</p>

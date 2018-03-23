@@ -12,7 +12,8 @@ defmodule Othello.Game do
       p2_score: 2,
       winner: 0,
       pos1: true,
-      pos2: true
+      pos2: true,
+      alert_message: " "
     }
   end
   
@@ -28,7 +29,8 @@ defmodule Othello.Game do
       p2_score: game.p2_score,
       winner: game.winner,
       pos1: game.pos1,
-      pos2: game.pos2
+      pos2: game.pos2,
+      alert_message: game.alert_message
     }
   end
 
@@ -38,15 +40,19 @@ defmodule Othello.Game do
       player1 = playername
       state = Map.put(state, :player1, player1)
       state = Map.put(state, :player_count, player_count)
+      state = Map.put(state, :alert_message, "Player 1 has joined! Waiting for Player 2!")
     else
       if state.player2 == nil do
         player2 = playername
         state = Map.put(state, :player2, player2)
         state = Map.put(state, :player_count, player_count)
+        state = Map.put(state, :alert_message, "Player 2 has joined! Now you can start playing!")
       else
         spectators = state.spectators
-        spectators = spectators ++ playername
-        state = Map.put(state, :spectators, spectators)
+        new_spectators = List.insert_at(spectators,state.player_count,playername)
+        alert_message = playername <> " has joined as a spectator!"
+        state = Map.put(state, :alert_message, alert_message)
+        state = Map.put(state, :spectators, new_spectators)
         state = Map.put(state, :player_count, player_count)
       end
     end 
@@ -304,7 +310,7 @@ defmodule Othello.Game do
   end
 
   def playing(state, tile, id) do
-    if id < 3 and state.winner == 0 do
+    if id < 3 and state.winner == 0 and state.player_count >= 2 do
       tiles = state.tiles
       is_player1 = state.is_player1
       if is_player1 do
