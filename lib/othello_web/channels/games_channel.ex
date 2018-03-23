@@ -21,6 +21,7 @@ defmodule OthelloWeb.GamesChannel do
      game = Game.playing(socket.assigns[:game], tile, id)
      Othello.GameBackup.save(socket.assigns[:name], game)
      socket = assign(socket, :game, game)
+     broadcast socket, "PlayerMadeAMove", game
      {:reply, {:ok, %{ "game" => Game.client_view(game)}}, socket}
   end
 
@@ -42,6 +43,7 @@ defmodule OthelloWeb.GamesChannel do
      game = Game.playerupdate(socket.assigns[:game],playername,player_count)
      Othello.GameBackup.save(socket.assigns[:name], game)
      socket = assign(socket, :game, game)
+     broadcast socket, "PlayerJoined", game
      {:reply, {:ok, %{ "game" => Game.client_view(game)}}, socket}
   end
 

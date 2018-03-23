@@ -53,6 +53,21 @@ class Othello extends React.Component{
 
     getView(view) {
     this.setState(view.game);
+    this.channel.on("PlayerMadeAMove", msg =>{
+      this.setState({tiles: msg.tiles})
+      this.setState({pos1: msg.pos1})
+      this.setState({pos2: msg.pos2})
+      this.setState({winner: msg.winner})
+      this.setState({p1_score: msg.p1_score})
+      this.setState({p2_score: msg.p2_score})
+    });
+
+    this.channel.on("PlayerJoined", msg =>{
+      this.setState({player1: msg.player1})
+      this.setState({player2: msg.player2})
+      this.setState({player_count: msg.player_count})
+    });
+
     }
 
     playing(tile) {
@@ -64,12 +79,15 @@ class Othello extends React.Component{
       this.channel.push("restart",)
                         .receive("ok",this.getView.bind(this));
     }
-
+    
     playerJoin(){
-      this.player_id = this.state.player_count + 1;
-      this.flag = 1;
-      this.channel.push("playerupdate",{playername: this.playername, player_count: this.state.player_count + 1})
-                        .receive("ok",this.getView.bind(this));
+      if (this.flag==0)
+      {
+        this.player_id = this.state.player_count + 1;
+        this.flag = 1;
+        this.channel.push("playerupdate",{playername: this.playername, player_count: this.state.player_count + 1})
+                        .receive("ok",this.getView.bind(this));  
+      }
     }
 
     renderTile(tile) {
