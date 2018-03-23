@@ -308,8 +308,6 @@ defmodule Othello.Game do
         val = 2
       end
 
-      if val == id do
-
       pos1 = true in ismovePossible(state, 1)
       pos2 = true in ismovePossible(state, 2)
 
@@ -385,15 +383,8 @@ defmodule Othello.Game do
           state = Map.put(state, :winner, w)
         end
       end
-      else
-      state = state
-      end 
-
-
-
     else
       state = state
-
     end    
   end
 end
