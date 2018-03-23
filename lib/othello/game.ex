@@ -79,8 +79,13 @@ defmodule Othello.Game do
 
   end
 
-  def restart() do
-    new()
+  def restart(state, id) do
+    if id == 1 do
+      w = 2
+    else
+      w =1
+    end
+    state = Map.put(state, :winner, w)
   end
 
   def flipback(state) do
@@ -299,7 +304,7 @@ defmodule Othello.Game do
   end
 
   def playing(state, tile, id) do
-    if id < 3 do
+    if id < 3 and state.winner == 0 do
       tiles = state.tiles
       is_player1 = state.is_player1
       if is_player1 do

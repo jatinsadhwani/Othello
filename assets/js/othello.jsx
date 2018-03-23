@@ -68,6 +68,10 @@ class Othello extends React.Component{
       this.setState({player_count: msg.player_count})
     });
 
+    this.channel.on("QuitGame", msg =>{
+      this.setState({winner: msg.winner})
+    });
+
     }
 
     playing(tile) {
@@ -76,7 +80,7 @@ class Othello extends React.Component{
     }
 
     reset(){
-      this.channel.push("restart",)
+      this.channel.push("restart", {id: this.player_id})
                         .receive("ok",this.getView.bind(this));
     }
     
@@ -103,12 +107,27 @@ class Othello extends React.Component{
           );
     }
 
-    renderResetButton(){
+    renderQuitButton(){
       return (
         <Button className="resetButtons" onClick={()=>this.reset()}>
-          Reset Game
+          Quit Game
         </Button>
       );
+    }
+
+    getWinner(){
+      if(this.player_id == this.state.winner){
+        return "You Won!!"
+      }
+      else if(this.state.winner == 0)
+      {
+        return "Still Playing"
+      }
+      else
+      {
+        return "Your Opponent Won!!"
+      }
+      
     }
 
     updatePlayerValue(ev){
@@ -124,6 +143,7 @@ class Othello extends React.Component{
       render(){
         var tiles = this.state.tiles;
         return(
+            <div>
             <div className="container board">
                 <div className="card-deck">
                   {this.renderTile(tiles[0])}
@@ -205,9 +225,19 @@ class Othello extends React.Component{
                   {this.renderTile(tiles[62])}
                   {this.renderTile(tiles[63])}
                 </div>
-                <div className="reset">
-                  {this.renderResetButton()}
+
+                <div className ="playerJoin">
+                  <h3>Enter your name:</h3>
                 </div>
+                <div className="playerJoinIp">
+                    <input type="text" onChange={(ev) => this.updatePlayerValue(ev)} name="playername"/>
+                </div>
+                <div>
+                    <Button className = "playerJoinBt" onClick = {() => this.playerJoin()} >Join Game</Button>
+                </div>
+            </div>
+            <div className = "container player">
+                
                 <div className="whiteScore">
                   <p>Black Score - {this.state.p1_score}</p>
                 </div>
@@ -217,7 +247,7 @@ class Othello extends React.Component{
                 </div>
 
                 <div className = "Winner">
-                  <p>Winner is - {this.state.winner} </p>
+                  <p>Winner is - {this.getWinner()} </p>
                 </div>
 
                 <div className = "Player1" >
@@ -236,14 +266,10 @@ class Othello extends React.Component{
                   <p>My ID - {this.player_id}</p>
               </div>
 
-                <div>
-                  <input type="text" onChange={(ev) => this.updatePlayerValue(ev)} name="playername"/>
-                </div>
-
-                <div>
-                <Button className = "playerJoin" onClick = {() => this.playerJoin()} >Join Game</Button>
-                </div>
-
+              <div className="reset">
+                  {this.renderQuitButton()}
+              </div>
+            </div>
             </div>
         );
     }
