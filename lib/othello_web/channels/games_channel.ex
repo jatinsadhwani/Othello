@@ -51,6 +51,15 @@ defmodule OthelloWeb.GamesChannel do
      {:reply, {:ok, %{ "game" => Game.client_view(game)}}, socket}
   end
 
+  def handle_in("newgame", %{"id" => id}, socket) do
+     game0 = Othello.GameBackup.load(socket.assigns[:name]) || socket.assigns[:game]
+     game = Game.newgame(game0,id)
+     Othello.GameBackup.save(socket.assigns[:name], game)
+     socket = assign(socket, :game, game)
+     broadcast socket, "NewGame", game
+     {:reply, {:ok, %{ "game" => Game.client_view(game)}}, socket}
+  end
+
   # Add authorization logic here as required.
   defp authorized?(_payload) do
     true

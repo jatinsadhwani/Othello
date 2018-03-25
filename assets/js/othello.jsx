@@ -76,6 +76,16 @@ class Othello extends React.Component{
       this.setState({winner: msg.winner})
     });
 
+    this.channel.on("NewGame", msg =>{
+      this.setState({tiles: msg.tiles})
+      this.setState({winner: msg.winner})
+      this.setState({p1_score: msg.winner})
+      this.setState({p2_score: msg.p2_score})
+      this.setState({is_player1: msg.is_player1})
+      this.setState({pos1: msg.pos1})
+      this.setState({pos2: msg.pos2})
+    });
+
     }
 
     playing(tile) {
@@ -119,6 +129,19 @@ class Othello extends React.Component{
           Quit Game
         </Button>
       );
+    }
+
+    renderNewButton(){
+      return (
+        <Button className="newGameButtons" onClick={()=>this.newGame()}>
+          New Game
+        </Button>
+      );
+    }
+
+    newGame(){
+        this.channel.push("newgame",{id: this.player_id})
+        .receive("ok",this.getView.bind(this));  
     }
 
     getWinner(){
@@ -369,6 +392,9 @@ class Othello extends React.Component{
 
               <div className="reset">
                   {this.renderQuitButton()}
+              </div>
+              <div className="reset">
+                  {this.renderNewButton()}
               </div>
               <div>
                 {this.getAlertMessage()}

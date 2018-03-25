@@ -34,8 +34,37 @@ defmodule Othello.Game do
     }
   end
 
+  def newgame(state, id) do
+    if id==0 do
+      state = state
+    else
+      p1_score = 2
+      state = Map.put(state, :p1_score, p1_score)
+
+      p2_score = 2
+      state = Map.put(state, :p2_score, p2_score)
+
+      tiles = getTiles()
+      state = Map.put(state, :tiles, tiles)
+
+      winner = 0
+      state = Map.put(state, :winner, winner)
+
+      is_player1 = true
+      state = Map.put(state, :is_player1, is_player1)
+
+      pos1 = true
+      state = Map.put(state, :pos1, pos1)
+
+      pos2 = true
+      state = Map.put(state, :pos2, pos2)
+
+    end
+  end
+
+
   def playerupdate(state, playername, player_count) do
-    IO.puts playername
+
     if state.player1 == nil do
       player1 = playername
       state = Map.put(state, :player1, player1)

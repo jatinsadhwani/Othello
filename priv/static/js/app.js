@@ -41406,6 +41406,16 @@ var Othello = function (_React$Component) {
       this.channel.on("QuitGame", function (msg) {
         _this2.setState({ winner: msg.winner });
       });
+
+      this.channel.on("NewGame", function (msg) {
+        _this2.setState({ tiles: msg.tiles });
+        _this2.setState({ winner: msg.winner });
+        _this2.setState({ p1_score: msg.winner });
+        _this2.setState({ p2_score: msg.p2_score });
+        _this2.setState({ is_player1: msg.is_player1 });
+        _this2.setState({ pos1: msg.pos1 });
+        _this2.setState({ pos2: msg.pos2 });
+      });
     }
   }, {
     key: 'playing',
@@ -41458,6 +41468,24 @@ var Othello = function (_React$Component) {
           } },
         'Quit Game'
       );
+    }
+  }, {
+    key: 'renderNewButton',
+    value: function renderNewButton() {
+      var _this5 = this;
+
+      return _react2.default.createElement(
+        _reactstrap.Button,
+        { className: 'newGameButtons', onClick: function onClick() {
+            return _this5.newGame();
+          } },
+        'New Game'
+      );
+    }
+  }, {
+    key: 'newGame',
+    value: function newGame() {
+      this.channel.push("newgame", { id: this.player_id }).receive("ok", this.getView.bind(this));
     }
   }, {
     key: 'getWinner',
@@ -41534,7 +41562,7 @@ var Othello = function (_React$Component) {
   }, {
     key: 'getAlertMessage',
     value: function getAlertMessage() {
-      var _this5 = this;
+      var _this6 = this;
 
       if (this.state.winner == 1 || this.state.winner == 2) {
         return _react2.default.createElement(
@@ -41546,7 +41574,7 @@ var Othello = function (_React$Component) {
             _react2.default.createElement(
               'span',
               { className: 'close', onClick: function onClick() {
-                  return _this5.closeAlert();
+                  return _this6.closeAlert();
                 } },
               '\xD7'
             ),
@@ -41568,7 +41596,7 @@ var Othello = function (_React$Component) {
   }, {
     key: 'renderPlayerIp',
     value: function renderPlayerIp() {
-      var _this6 = this;
+      var _this7 = this;
 
       if (this.state.player_count < 2) {
         return _react2.default.createElement(
@@ -41587,7 +41615,7 @@ var Othello = function (_React$Component) {
             'div',
             { className: 'playerJoinIp' },
             _react2.default.createElement('input', { type: 'text', onChange: function onChange(ev) {
-                return _this6.updatePlayerValue(ev);
+                return _this7.updatePlayerValue(ev);
               }, name: 'playername' })
           ),
           _react2.default.createElement(
@@ -41596,7 +41624,7 @@ var Othello = function (_React$Component) {
             _react2.default.createElement(
               _reactstrap.Button,
               { onClick: function onClick() {
-                  return _this6.playerJoin();
+                  return _this7.playerJoin();
                 } },
               'Join Game'
             )
@@ -41786,6 +41814,11 @@ var Othello = function (_React$Component) {
               'div',
               { className: 'reset' },
               this.renderQuitButton()
+            ),
+            _react2.default.createElement(
+              'div',
+              { className: 'reset' },
+              this.renderNewButton()
             ),
             _react2.default.createElement(
               'div',
