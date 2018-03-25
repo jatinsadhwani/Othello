@@ -1,6 +1,6 @@
-<div class="row">
-  <div class="col">
-    <h1 id="index-page">Join a Game</h1>
+<div class="row index">
+  <div class="col join">
+    <h1 id="index-page" class="index-page">Enter the Game Name to join</h1>
     <h2 align="center"><input type="text" id="name" name="GameName"></h2>
     <h3 align="center"><a id="url" onclick="this.href = '/game/' + document.getElementById('name').value" href="" >JOIN</a></h3>
   </div>

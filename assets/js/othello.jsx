@@ -30,7 +30,7 @@ class Othello extends React.Component{
     constructor(props) {
         super(props);
         this.channel = props.channel;
-        this.player_id;
+        this.player_id = 0;
         this.playername;
         this.flag=0;
         this.state = {
@@ -56,6 +56,7 @@ class Othello extends React.Component{
     this.setState(view.game);
     this.channel.on("PlayerMadeAMove", msg =>{
       this.setState({tiles: msg.tiles})
+      this.setState({is_player1: msg.is_player1})
       this.setState({pos1: msg.pos1})
       this.setState({pos2: msg.pos2})
       this.setState({winner: msg.winner})
@@ -95,6 +96,8 @@ class Othello extends React.Component{
         this.channel.push("playerupdate",{playername: this.playername, player_count: this.state.player_count + 1})
                         .receive("ok",this.getView.bind(this));  
       }
+      var ip = this.refs.Input;
+      ip.style.display = "none";
     }
 
     renderTile(tile) {
@@ -119,18 +122,28 @@ class Othello extends React.Component{
     }
 
     getWinner(){
+      var x;
+      if(this.state.winner == 1){
+        x = "Player 1 Wins!!"
+      }
+      else if(this.state.winner == 2){
+        x = "Player 2 Wins!!"
+      }
+      else {
+        x = "Still Playing!!"
+      }
+
       if(this.player_id == this.state.winner){
         return "You Won!!"
       }
-      else if(this.state.winner == 0)
+      else if(this.player_id == 0 || this.player_id >2)
       {
-        return "Still Playing"
+        return x;
       }
       else
       {
         return "Your Opponent Won!!"
-      }
-      
+      }      
     }
 
     updatePlayerValue(ev){
@@ -139,15 +152,117 @@ class Othello extends React.Component{
       }
     }
 
-    
+    getPlayer1() {
+        if(this.player_id == 1 && this.state.player1){
+            return "You"
+        }
+        else {
+            return this.state.player1
+        }
+    }
 
+    getPlayer2() {
+        if(this.player_id == 2 && this.state.player2){
+            return "You"
+        }
+        else {
+            return this.state.player2
+        }
+    }
 
+    getTurn(){
+        if(this.state.player_count >= 2){
+            if(this.state.is_player1){
+                if(this.player_id == 1){
+                    return "Your Turn"
+                }
+                else if(this.player_id == 2)
+                {
+                    return "Opponent's Turn"
+                }
+                else
+                {
+                    return "Player 1's turn"
+                }
+            }
+            else 
+            {
+                if(this.player_id == 2){
+                    return "Your Turn"
+                }
+                else if(this.player_id == 1)
+                {
+                    return "Opponent's Turn"
+                }
+                else
+                {
+                    return "Player 2's turn"
+                }
+            }
+        }
+        else if (this.state.player_count == 1)
+        {
+            return "Waiting for Player 2 to join"
+        }
+        else
+        {
+            return "Waiting for game to begin"
+        }
+    }
+
+    getAlertMessage() {
+        if(this.state.winner == 1 || this.state.winner == 2){
+            return (
+                <div id="myModal" className="modal" ref="Modal">
+                  <div className="modal-content">
+                    <span className="close" onClick = {() => this.closeAlert()}>&times;</span>
+                    <p>{this.getWinner()}</p>
+                  </div>
+                </div>
+            );
+        }
+    }
+
+    closeAlert(){
+        var modal = this.refs.Modal;
+        modal.style.display = "none";
+    }
+
+    renderPlayerIp() {
+        if(this.state.player_count < 2){
+            return (
+            <div className="card-deck" ref="Input">
+            <div className ="playerJoin">
+                <h3>Enter your name:</h3>
+            </div>
+            <div className="playerJoinIp">
+                <input type="text" onChange={(ev) => this.updatePlayerValue(ev)} name="playername"/>
+            </div>
+            <div className = "playerJoinBt">
+                <Button onClick = {() => this.playerJoin()} >Join Game</Button>
+            </div>
+            </div>
+            );
+        }
+        else if(this.player_id != 1 && this.player_id != 2)
+        {
+            return (
+            <div className ="playerJoin">
+                <h3>You are a spectator</h3>
+            </div>
+            );
+        }
+        else
+        {
+            return;
+        }
+    }
 
       render(){
         var tiles = this.state.tiles;
         return(
-            <div>
-            <div className="container board">
+            <div className="canvas">
+            <div className="board">
                 <div className="card-deck">
                   {this.renderTile(tiles[0])}
                   {this.renderTile(tiles[1])}
@@ -228,54 +343,36 @@ class Othello extends React.Component{
                   {this.renderTile(tiles[62])}
                   {this.renderTile(tiles[63])}
                 </div>
-
-                <div className ="playerJoin">
-                  <h3>Enter your name:</h3>
-                </div>
-                <div className="playerJoinIp">
-                    <input type="text" onChange={(ev) => this.updatePlayerValue(ev)} name="playername"/>
-                </div>
-                <div>
-                    <Button className = "playerJoinBt" onClick = {() => this.playerJoin()} >Join Game</Button>
+                <div className="card-deck">
+                    {this.renderPlayerIp()}
                 </div>
             </div>
-            <div className = "container player">
-                
-                <div className="whiteScore">
-                  <p>Black Score - {this.state.p1_score}</p>
+            <div className = "player">
+                <div className="score">
+                <div className = "turn">
+                  <h3>Score Card</h3>
                 </div>
 
-                <div className="whiteScore">
-                  <p>White Score - {this.state.p2_score}</p>
+                <div>
+                  <h5>Player 1: {this.getPlayer1()}</h5>
+                  <span className="disc-black">{this.state.p1_score}</span>  
                 </div>
 
-                <div className = "Winner">
-                  <p>Winner is - {this.getWinner()} </p>
+                <div className = "turn">
+                  <h5>Player 2: {this.getPlayer2()}</h5>
+                  <span className="disc-white">{this.state.p2_score}</span>
                 </div>
 
-                <div className = "Player1" >
-                  <p>Player 1 - {this.state.player1}</p>
+                <div className = "turn">
+                  <h5>{this.getTurn()}</h5>
                 </div>
-
-                <div className = "Player2" >
-                  <p>Player 2 - {this.state.player2}</p>
-                </div>
-
-                <div className = "Alert" >
-                  <p>Alert Message - {this.state.alert_message}</p>
-                </div>
-                
-
-              <div className = "myname" >
-                  <p>My name - {this.playername}</p>
-              </div>
-
-              <div className = "myid" >
-                  <p>My ID - {this.player_id}</p>
-              </div>
 
               <div className="reset">
                   {this.renderQuitButton()}
+              </div>
+              <div>
+                {this.getAlertMessage()}
+              </div>
               </div>
             </div>
             </div>
