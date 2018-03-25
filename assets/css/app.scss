@@ -14,21 +14,29 @@ h1 {
     padding-left: 15px;
 }
 
-body, html, main {
+body, html {
+    background: url(reversi2.jpg);
     height: 100%;
-    margin: 0;
+    width: 100%;
+    padding: 25px;
+    background-repeat: no-repeat;
+    background-size: auto;
+    background-size: cover;
 }
 
+html {
+    padding: 0;
+}
 .container {
     height: 100%;
 }
 
 .index-page {
-    color: #0ae0ef;
+    color: #CDA96D;
 }
 
 a {
-    background-color: #0ae0ef;
+    background-color: #CDA96D;
     color: black;
     padding: 15px 15px;
     text-align: center;
@@ -40,26 +48,8 @@ a {
     padding-top: 22%;
 }
 
-.canvas {
-    background: url(reversi.jpg);
-    border: 1px solid #c3c3c3;
-    height: 100%;
-    width: 100%;
-    padding: 25px;
-    background-repeat: no-repeat;
-    background-size: auto;
-    background-blend-mode: screen;
-}
-
-.index {
-    background: url(reversi2.jpg);
-    border: 1px solid #c3c3c3;
-    height: 100%;
-    width: 100%;
-    padding: 25px;
-    background-repeat: no-repeat;
-    background-size: auto;
-    background-blend-mode: screen;
+.title {
+    color: #CDA96D;
 }
 
 .dgButtons{
@@ -145,18 +135,18 @@ a {
     text-align: center;
     width: 40%;
     float: right;
-    margin-top: 5%;
+    margin-top: 7%;
 }
 
 
 .playerJoin{
-    color: antiquewhite;
-    margin-left: 19%;
+    color: #CDA96D;
+    margin-left: 23%;
     margin-top: 3%;
 }
 
 .playerJoinIp{
-    margin-left: 15%;
+    margin-left: 12.5%;
     margin-top: 3%;
     line-height: 30px;
 }
