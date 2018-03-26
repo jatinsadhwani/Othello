@@ -123,6 +123,22 @@ class Othello extends React.Component{
           );
     }
 
+    renderNaming(alpha){
+        return (
+            <div className="naming">
+              <h4>{alpha}</h4>
+            </div>
+          );
+    }
+
+    renderNumbering(alpha){
+        return (
+            <div className="numbering">
+              <h4>{alpha}</h4>
+            </div>
+          );
+    }
+
     renderQuitButton(){
         if(this.state.player1 && this.state.player2 && (this.player_id == 1 || this.player_id == 2)){
           return (
@@ -244,7 +260,7 @@ class Othello extends React.Component{
         }
         else
         {
-            return "Waiting for game to begin"
+            return "Waiting for players to join"
         }
     }
 
@@ -288,7 +304,7 @@ class Othello extends React.Component{
         else if(this.player_id != 1 && this.player_id != 2)
         {
             return (
-            <div className ="playerJoin">
+            <div className ="spectator">
                 <h3>You are a spectator</h3>
             </div>
             );
@@ -305,6 +321,18 @@ class Othello extends React.Component{
             <div className="canvas">
             <div className="board">
                 <div className="card-deck">
+                  {this.renderNaming(" ")}
+                  {this.renderNaming("A")}
+                  {this.renderNaming("B")}
+                  {this.renderNaming("C")}
+                  {this.renderNaming("D")}
+                  {this.renderNaming("E")}
+                  {this.renderNaming("F")}
+                  {this.renderNaming("G")}
+                  {this.renderNaming("H")}
+                </div>
+                <div className="card-deck">
+                  {this.renderNumbering("1")}
                   {this.renderTile(tiles[0])}
                   {this.renderTile(tiles[1])}
                   {this.renderTile(tiles[2])}
@@ -315,6 +343,7 @@ class Othello extends React.Component{
                   {this.renderTile(tiles[7])}
                 </div>
                 <div className="card-deck" >
+                  {this.renderNumbering("2")}
                   {this.renderTile(tiles[8])}
                   {this.renderTile(tiles[9])}
                   {this.renderTile(tiles[10])}
@@ -325,6 +354,7 @@ class Othello extends React.Component{
                   {this.renderTile(tiles[15])}
                 </div>
                 <div className="card-deck">
+                  {this.renderNumbering("3")}
                   {this.renderTile(tiles[16])}
                   {this.renderTile(tiles[17])}
                   {this.renderTile(tiles[18])}
@@ -335,6 +365,7 @@ class Othello extends React.Component{
                   {this.renderTile(tiles[23])}
                 </div>
                 <div className="card-deck">
+                  {this.renderNumbering("4")}
                   {this.renderTile(tiles[24])}
                   {this.renderTile(tiles[25])}
                   {this.renderTile(tiles[26])}
@@ -345,6 +376,7 @@ class Othello extends React.Component{
                   {this.renderTile(tiles[31])}
                 </div>
                 <div className="card-deck">
+                  {this.renderNumbering("5")}
                   {this.renderTile(tiles[32])}
                   {this.renderTile(tiles[33])}
                   {this.renderTile(tiles[34])}
@@ -355,6 +387,7 @@ class Othello extends React.Component{
                   {this.renderTile(tiles[39])}
                 </div>
                 <div className="card-deck" >
+                  {this.renderNumbering("6")}
                   {this.renderTile(tiles[40])}
                   {this.renderTile(tiles[41])}
                   {this.renderTile(tiles[42])}
@@ -365,6 +398,7 @@ class Othello extends React.Component{
                   {this.renderTile(tiles[47])}
                 </div>
                 <div className="card-deck">
+                  {this.renderNumbering("7")}
                   {this.renderTile(tiles[48])}
                   {this.renderTile(tiles[49])}
                   {this.renderTile(tiles[50])}
@@ -375,6 +409,7 @@ class Othello extends React.Component{
                   {this.renderTile(tiles[55])}
                 </div>
                 <div className="card-deck">
+                  {this.renderNumbering("8")}
                   {this.renderTile(tiles[56])}
                   {this.renderTile(tiles[57])}
                   {this.renderTile(tiles[58])}

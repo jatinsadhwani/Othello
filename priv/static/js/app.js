@@ -41457,6 +41457,32 @@ var Othello = function (_React$Component) {
       );
     }
   }, {
+    key: 'renderNaming',
+    value: function renderNaming(alpha) {
+      return _react2.default.createElement(
+        'div',
+        { className: 'naming' },
+        _react2.default.createElement(
+          'h4',
+          null,
+          alpha
+        )
+      );
+    }
+  }, {
+    key: 'renderNumbering',
+    value: function renderNumbering(alpha) {
+      return _react2.default.createElement(
+        'div',
+        { className: 'numbering' },
+        _react2.default.createElement(
+          'h4',
+          null,
+          alpha
+        )
+      );
+    }
+  }, {
     key: 'renderQuitButton',
     value: function renderQuitButton() {
       var _this4 = this;
@@ -41566,7 +41592,7 @@ var Othello = function (_React$Component) {
       } else if (this.state.player_count == 1) {
         return "Waiting for Player 2 to join";
       } else {
-        return "Waiting for game to begin";
+        return "Waiting for players to join";
       }
     }
   }, {
@@ -41648,7 +41674,7 @@ var Othello = function (_React$Component) {
       } else if (this.player_id != 1 && this.player_id != 2) {
         return _react2.default.createElement(
           'div',
-          { className: 'playerJoin' },
+          { className: 'spectator' },
           _react2.default.createElement(
             'h3',
             null,
@@ -41672,6 +41698,20 @@ var Othello = function (_React$Component) {
           _react2.default.createElement(
             'div',
             { className: 'card-deck' },
+            this.renderNaming(" "),
+            this.renderNaming("A"),
+            this.renderNaming("B"),
+            this.renderNaming("C"),
+            this.renderNaming("D"),
+            this.renderNaming("E"),
+            this.renderNaming("F"),
+            this.renderNaming("G"),
+            this.renderNaming("H")
+          ),
+          _react2.default.createElement(
+            'div',
+            { className: 'card-deck' },
+            this.renderNumbering("1"),
             this.renderTile(tiles[0]),
             this.renderTile(tiles[1]),
             this.renderTile(tiles[2]),
@@ -41684,6 +41724,7 @@ var Othello = function (_React$Component) {
           _react2.default.createElement(
             'div',
             { className: 'card-deck' },
+            this.renderNumbering("2"),
             this.renderTile(tiles[8]),
             this.renderTile(tiles[9]),
             this.renderTile(tiles[10]),
@@ -41696,6 +41737,7 @@ var Othello = function (_React$Component) {
           _react2.default.createElement(
             'div',
             { className: 'card-deck' },
+            this.renderNumbering("3"),
             this.renderTile(tiles[16]),
             this.renderTile(tiles[17]),
             this.renderTile(tiles[18]),
@@ -41708,6 +41750,7 @@ var Othello = function (_React$Component) {
           _react2.default.createElement(
             'div',
             { className: 'card-deck' },
+            this.renderNumbering("4"),
             this.renderTile(tiles[24]),
             this.renderTile(tiles[25]),
             this.renderTile(tiles[26]),
@@ -41720,6 +41763,7 @@ var Othello = function (_React$Component) {
           _react2.default.createElement(
             'div',
             { className: 'card-deck' },
+            this.renderNumbering("5"),
             this.renderTile(tiles[32]),
             this.renderTile(tiles[33]),
             this.renderTile(tiles[34]),
@@ -41732,6 +41776,7 @@ var Othello = function (_React$Component) {
           _react2.default.createElement(
             'div',
             { className: 'card-deck' },
+            this.renderNumbering("6"),
             this.renderTile(tiles[40]),
             this.renderTile(tiles[41]),
             this.renderTile(tiles[42]),
@@ -41744,6 +41789,7 @@ var Othello = function (_React$Component) {
           _react2.default.createElement(
             'div',
             { className: 'card-deck' },
+            this.renderNumbering("7"),
             this.renderTile(tiles[48]),
             this.renderTile(tiles[49]),
             this.renderTile(tiles[50]),
@@ -41756,6 +41802,7 @@ var Othello = function (_React$Component) {
           _react2.default.createElement(
             'div',
             { className: 'card-deck' },
+            this.renderNumbering("8"),
             this.renderTile(tiles[56]),
             this.renderTile(tiles[57]),
             this.renderTile(tiles[58]),

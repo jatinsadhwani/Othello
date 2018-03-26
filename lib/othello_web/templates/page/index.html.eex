@@ -1,10 +1,23 @@
 <div class="row index">
   <div class="col">
-  	<h1 class="title"> Welcome to Othello!! <h1>
+  	<h1 class="title"> Welcome to Othello!! </h1>
   	<div class="join">
-    <h1 id="index-page" class="index-page">Enter the Game Name to join</h1>
-    <h2 align="center"><input type="text" id="name" name="GameName"></h2>
-    <h3 align="center"><a id="url" onclick="this.href = '/game/' + document.getElementById('name').value" href="" >JOIN</a></h3>
+    <h3 id="index-page" class="index-page">Enter a name to create a new game</h3>
+    <h4 class="card-title"><input type="text" id="name" name="GameName"></h4>
+    <h5 class="card-title"><a id="url" onclick="this.href = '/game/' + document.getElementById('name').value" href="" >Create</a></h5>
     </div>
+    <h4 class="card-title index-page table-title">Live Games</h4>
+    <table class="table gameNames">
+      <tbody>
+        <%= for a <- Othello.GameBackup.loadGames() do %>
+            <%= if Othello.GameBackup.load(a).winner != (1 || 2) do %>
+	            <tr>
+	              <td class="index-page gn"><h4><%= a %></h4></td>
+	              <td class="navigate"><a id="url" onclick="this.href = '/game/' + '<%= a %>'" href="" >Join</a></td>
+	            </tr>
+            <% end %>
+        <% end %>
+      </tbody>
+	</table>
   </div>
 </div>
