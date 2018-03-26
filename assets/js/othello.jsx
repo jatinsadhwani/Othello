@@ -280,6 +280,30 @@ class Othello extends React.Component{
         }
     }
 
+
+    noMoveAlertMessage() {
+      if(this.player_id == 1 && this.state.pos1 == false){
+          return (
+              <div id="myModal" className="modal" ref="Modal">
+                <div className="modal-content">
+                  <span className="close" onClick = {() => this.closeAlert()}>&times;</span>
+                  <p className="turn">No legal moves left! Transferring the chance to Player 2</p>
+                </div>
+              </div>
+          );
+      }
+      else if(this.player_id == 2 && this.state.pos2 == false){
+        return (
+          <div id="myModal" className="modal" ref="Modal">
+            <div className="modal-content">
+              <span className="close" onClick = {() => this.closeAlert()}>&times;</span>
+              <p className="turn">No legal moves left! Transferring the chance to Player 1</p>
+            </div>
+          </div>
+        );
+      } 
+  }
+
     closeAlert(){
         var modal = this.refs.Modal;
         modal.style.display = "none";
@@ -449,6 +473,10 @@ class Othello extends React.Component{
               
               <div>
                 {this.getAlertMessage()}
+              </div>
+
+              <div>
+                {this.noMoveAlertMessage()}
               </div>
               </div>
             </div>
