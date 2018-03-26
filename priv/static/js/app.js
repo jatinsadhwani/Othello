@@ -41410,7 +41410,7 @@ var Othello = function (_React$Component) {
       this.channel.on("NewGame", function (msg) {
         _this2.setState({ tiles: msg.tiles });
         _this2.setState({ winner: msg.winner });
-        _this2.setState({ p1_score: msg.winner });
+        _this2.setState({ p1_score: msg.p1_score });
         _this2.setState({ p2_score: msg.p2_score });
         _this2.setState({ is_player1: msg.is_player1 });
         _this2.setState({ pos1: msg.pos1 });
@@ -41461,31 +41461,41 @@ var Othello = function (_React$Component) {
     value: function renderQuitButton() {
       var _this4 = this;
 
-      return _react2.default.createElement(
-        _reactstrap.Button,
-        { className: 'resetButtons', onClick: function onClick() {
-            return _this4.reset();
-          } },
-        'Quit Game'
-      );
+      if (this.state.player1 && this.state.player2 && (this.player_id == 1 || this.player_id == 2)) {
+        return _react2.default.createElement(
+          _reactstrap.Button,
+          { className: 'resetButtons', onClick: function onClick() {
+              return _this4.reset();
+            } },
+          'Quit Game'
+        );
+      } else {
+        return;
+      }
     }
   }, {
     key: 'renderNewButton',
     value: function renderNewButton() {
       var _this5 = this;
 
-      return _react2.default.createElement(
-        _reactstrap.Button,
-        { className: 'newGameButtons', onClick: function onClick() {
-            return _this5.newGame();
-          } },
-        'New Game'
-      );
+      if (this.state.player1 && this.state.player2 && (this.player_id == 1 || this.player_id == 2)) {
+        return _react2.default.createElement(
+          _reactstrap.Button,
+          { className: 'newGameButtons', onClick: function onClick() {
+              return _this5.newGame();
+            } },
+          'New Game'
+        );
+      } else {
+        return;
+      }
     }
   }, {
     key: 'newGame',
     value: function newGame() {
       this.channel.push("newgame", { id: this.player_id }).receive("ok", this.getView.bind(this));
+      var modal = this.refs.Modal;
+      modal.style.display = "none";
     }
   }, {
     key: 'getWinner',
@@ -41580,8 +41590,13 @@ var Othello = function (_React$Component) {
             ),
             _react2.default.createElement(
               'p',
-              null,
+              { className: 'turn' },
               this.getWinner()
+            ),
+            _react2.default.createElement(
+              'div',
+              { className: 'turn' },
+              this.renderNewButton()
             )
           )
         );
@@ -41814,11 +41829,6 @@ var Othello = function (_React$Component) {
               'div',
               { className: 'reset' },
               this.renderQuitButton()
-            ),
-            _react2.default.createElement(
-              'div',
-              { className: 'reset' },
-              this.renderNewButton()
             ),
             _react2.default.createElement(
               'div',

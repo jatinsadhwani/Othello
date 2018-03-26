@@ -35,9 +35,7 @@ defmodule Othello.Game do
   end
 
   def newgame(state, id) do
-    if id==0 do
-      state = state
-    else
+    
       p1_score = 2
       state = Map.put(state, :p1_score, p1_score)
 
@@ -58,8 +56,6 @@ defmodule Othello.Game do
 
       pos2 = true
       state = Map.put(state, :pos2, pos2)
-
-    end
   end
 
 

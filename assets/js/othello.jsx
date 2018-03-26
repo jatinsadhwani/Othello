@@ -79,7 +79,7 @@ class Othello extends React.Component{
     this.channel.on("NewGame", msg =>{
       this.setState({tiles: msg.tiles})
       this.setState({winner: msg.winner})
-      this.setState({p1_score: msg.winner})
+      this.setState({p1_score: msg.p1_score})
       this.setState({p2_score: msg.p2_score})
       this.setState({is_player1: msg.is_player1})
       this.setState({pos1: msg.pos1})
@@ -124,24 +124,39 @@ class Othello extends React.Component{
     }
 
     renderQuitButton(){
-      return (
-        <Button className="resetButtons" onClick={()=>this.reset()}>
-          Quit Game
-        </Button>
-      );
+        if(this.state.player1 && this.state.player2 && (this.player_id == 1 || this.player_id == 2)){
+          return (
+            <Button className="resetButtons" onClick={()=>this.reset()}>
+              Quit Game
+            </Button>
+          );
+        }
+        else
+        {
+            return;
+        }
+
     }
 
     renderNewButton(){
+     if(this.state.player1 && this.state.player2 && (this.player_id == 1 || this.player_id == 2)){
       return (
         <Button className="newGameButtons" onClick={()=>this.newGame()}>
           New Game
         </Button>
       );
+      }
+      else
+      {
+        return;
+      }
     }
 
     newGame(){
         this.channel.push("newgame",{id: this.player_id})
-        .receive("ok",this.getView.bind(this));  
+        .receive("ok",this.getView.bind(this));
+        var modal = this.refs.Modal;
+        modal.style.display = "none";  
     }
 
     getWinner(){
@@ -239,7 +254,10 @@ class Othello extends React.Component{
                 <div id="myModal" className="modal" ref="Modal">
                   <div className="modal-content">
                     <span className="close" onClick = {() => this.closeAlert()}>&times;</span>
-                    <p>{this.getWinner()}</p>
+                    <p className="turn">{this.getWinner()}</p>
+                    <div className="turn">
+                        {this.renderNewButton()}
+                    </div>
                   </div>
                 </div>
             );
@@ -393,9 +411,7 @@ class Othello extends React.Component{
               <div className="reset">
                   {this.renderQuitButton()}
               </div>
-              <div className="reset">
-                  {this.renderNewButton()}
-              </div>
+              
               <div>
                 {this.getAlertMessage()}
               </div>
