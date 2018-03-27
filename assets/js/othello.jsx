@@ -305,6 +305,8 @@ class Othello extends React.Component{
   }
 
     closeAlert(){
+        this.channel.push("quit")
+                            .receive("ok",this.getView.bind(this));
         var modal = this.refs.Modal;
         modal.style.display = "none";
     }

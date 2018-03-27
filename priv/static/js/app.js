@@ -41680,6 +41680,7 @@ var Othello = function (_React$Component) {
   }, {
     key: 'closeAlert',
     value: function closeAlert() {
+      this.channel.push("quit").receive("ok", this.getView.bind(this));
       var modal = this.refs.Modal;
       modal.style.display = "none";
     }

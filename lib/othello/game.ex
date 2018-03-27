@@ -119,8 +119,8 @@ defmodule Othello.Game do
     state = Map.put(state, :winner, w)
   end
 
-  def flipback(state) do
-       
+  def quit() do
+    new()
   end
 
   def attack(state, []) do

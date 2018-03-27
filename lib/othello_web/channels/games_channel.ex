@@ -35,8 +35,8 @@ defmodule OthelloWeb.GamesChannel do
      {:reply, {:ok, %{ "game" => Game.client_view(game)}}, socket}
   end
 
-  def handle_in("flipback", %{}, socket) do
-     game = Game.flipback(socket.assigns[:game])
+  def handle_in("quit", %{}, socket) do
+     game = Game.quit()
      Othello.GameBackup.save(socket.assigns[:name], game)
      socket = assign(socket, :game, game)
      {:reply, {:ok, %{ "game" => Game.client_view(game)}}, socket}
