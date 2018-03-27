@@ -11,6 +11,12 @@ defmodule Othello.GameBackup do
     end
   end
 
+  def delete(name) do
+    Agent.update __MODULE__, fn state ->
+      Map.delete(state, name)
+    end
+  end
+
   def loadGames() do
     Agent.get __MODULE__, fn state ->
       Map.keys(state)

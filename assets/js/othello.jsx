@@ -76,16 +76,6 @@ class Othello extends React.Component{
       this.setState({winner: msg.winner})
     });
 
-    this.channel.on("NewGame", msg =>{
-      this.setState({tiles: msg.tiles})
-      this.setState({winner: msg.winner})
-      this.setState({p1_score: msg.p1_score})
-      this.setState({p2_score: msg.p2_score})
-      this.setState({is_player1: msg.is_player1})
-      this.setState({pos1: msg.pos1})
-      this.setState({pos2: msg.pos2})
-    });
-
     }
 
     playing(tile) {
@@ -152,27 +142,6 @@ class Othello extends React.Component{
             return;
         }
 
-    }
-
-    renderNewButton(){
-     if(this.state.player1 && this.state.player2 && (this.player_id == 1 || this.player_id == 2)){
-      return (
-        <Button className="newGameButtons" onClick={()=>this.newGame()}>
-          New Game
-        </Button>
-      );
-      }
-      else
-      {
-        return;
-      }
-    }
-
-    newGame(){
-        this.channel.push("newgame",{id: this.player_id})
-        .receive("ok",this.getView.bind(this));
-        var modal = this.refs.Modal;
-        modal.style.display = "none";  
     }
 
     getWinner(){
@@ -271,9 +240,6 @@ class Othello extends React.Component{
                   <div className="modal-content">
                     <span className="close" onClick = {() => this.closeAlert()}>&times;</span>
                     <p className="turn">{this.getWinner()}</p>
-                    <div className="turn">
-                        {this.renderNewButton()}
-                    </div>
                   </div>
                 </div>
             );
@@ -284,31 +250,44 @@ class Othello extends React.Component{
     noMoveAlertMessage() {
       if(this.player_id == 1 && this.state.pos1 == false){
           return (
-              <div id="myModal" className="modal" ref="Modal">
+              <div id="myModal" className="modal" ref="illegalModal">
                 <div className="modal-content">
-                  <span className="close" onClick = {() => this.closeAlert()}>&times;</span>
-                  <p className="turn">No legal moves left! Transferring the chance to Player 2</p>
+                  <span className="close" onClick = {() => this.closeIllegalAlert()}>&times;</span>
+                  <p className="turn">No legal moves left! Passing the turn to Player 2</p>
                 </div>
               </div>
           );
       }
       else if(this.player_id == 2 && this.state.pos2 == false){
         return (
-          <div id="myModal" className="modal" ref="Modal">
+          <div id="myModal" className="modal" ref="illegalModal">
             <div className="modal-content">
-              <span className="close" onClick = {() => this.closeAlert()}>&times;</span>
-              <p className="turn">No legal moves left! Transferring the chance to Player 1</p>
+              <span className="close" onClick = {() => this.closeIllegalAlert()}>&times;</span>
+              <p className="turn">No legal moves left! Passing the turn to Player 1</p>
             </div>
           </div>
         );
       } 
   }
 
-    closeAlert(){
-        this.channel.push("quit")
-                            .receive("ok",this.getView.bind(this));
-        var modal = this.refs.Modal;
+    closeIllegalAlert(){
+        var modal = this.refs.illegalModal;
         modal.style.display = "none";
+    }
+
+    closeAlert(){
+        if(this.player_id == 1 || this.player_id == 2){
+            this.channel.push("quit")
+                                .receive("ok",this.getView.bind(this));
+            var modal = this.refs.Modal;
+            modal.style.display = "none";
+            this.player_id = 0;
+            window.location.href = "/"
+        }
+        else
+        {
+            window.location.href = "/"
+        }
     }
 
     renderPlayerIp() {

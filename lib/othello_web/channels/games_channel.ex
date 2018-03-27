@@ -36,8 +36,9 @@ defmodule OthelloWeb.GamesChannel do
   end
 
   def handle_in("quit", %{}, socket) do
-     game = Game.quit()
-     Othello.GameBackup.save(socket.assigns[:name], game)
+     game0 = Othello.GameBackup.load(socket.assigns[:name])
+     game = Game.quit(game0)
+     Othello.GameBackup.delete(socket.assigns[:name])
      socket = assign(socket, :game, game)
      {:reply, {:ok, %{ "game" => Game.client_view(game)}}, socket}
   end
@@ -48,15 +49,6 @@ defmodule OthelloWeb.GamesChannel do
      Othello.GameBackup.save(socket.assigns[:name], game)
      socket = assign(socket, :game, game)
      broadcast socket, "PlayerJoined", game
-     {:reply, {:ok, %{ "game" => Game.client_view(game)}}, socket}
-  end
-
-  def handle_in("newgame", %{"id" => id}, socket) do
-     game0 = Othello.GameBackup.load(socket.assigns[:name]) || socket.assigns[:game]
-     game = Game.newgame(game0,id)
-     Othello.GameBackup.save(socket.assigns[:name], game)
-     socket = assign(socket, :game, game)
-     broadcast socket, "NewGame", game
      {:reply, {:ok, %{ "game" => Game.client_view(game)}}, socket}
   end
 
