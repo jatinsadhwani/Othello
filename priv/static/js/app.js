@@ -41629,6 +41629,55 @@ var Othello = function (_React$Component) {
       }
     }
   }, {
+    key: 'noMoveAlertMessage',
+    value: function noMoveAlertMessage() {
+      var _this7 = this;
+
+      if (this.player_id == 1 && this.state.pos1 == false) {
+        return _react2.default.createElement(
+          'div',
+          { id: 'myModal', className: 'modal', ref: 'Modal' },
+          _react2.default.createElement(
+            'div',
+            { className: 'modal-content' },
+            _react2.default.createElement(
+              'span',
+              { className: 'close', onClick: function onClick() {
+                  return _this7.closeAlert();
+                } },
+              '\xD7'
+            ),
+            _react2.default.createElement(
+              'p',
+              { className: 'turn' },
+              'No legal moves left! Transferring the chance to Player 2'
+            )
+          )
+        );
+      } else if (this.player_id == 2 && this.state.pos2 == false) {
+        return _react2.default.createElement(
+          'div',
+          { id: 'myModal', className: 'modal', ref: 'Modal' },
+          _react2.default.createElement(
+            'div',
+            { className: 'modal-content' },
+            _react2.default.createElement(
+              'span',
+              { className: 'close', onClick: function onClick() {
+                  return _this7.closeAlert();
+                } },
+              '\xD7'
+            ),
+            _react2.default.createElement(
+              'p',
+              { className: 'turn' },
+              'No legal moves left! Transferring the chance to Player 1'
+            )
+          )
+        );
+      }
+    }
+  }, {
     key: 'closeAlert',
     value: function closeAlert() {
       var modal = this.refs.Modal;
@@ -41637,7 +41686,7 @@ var Othello = function (_React$Component) {
   }, {
     key: 'renderPlayerIp',
     value: function renderPlayerIp() {
-      var _this7 = this;
+      var _this8 = this;
 
       if (this.state.player_count < 2) {
         return _react2.default.createElement(
@@ -41656,7 +41705,7 @@ var Othello = function (_React$Component) {
             'div',
             { className: 'playerJoinIp' },
             _react2.default.createElement('input', { type: 'text', onChange: function onChange(ev) {
-                return _this7.updatePlayerValue(ev);
+                return _this8.updatePlayerValue(ev);
               }, name: 'playername' })
           ),
           _react2.default.createElement(
@@ -41665,7 +41714,7 @@ var Othello = function (_React$Component) {
             _react2.default.createElement(
               _reactstrap.Button,
               { onClick: function onClick() {
-                  return _this7.playerJoin();
+                  return _this8.playerJoin();
                 } },
               'Join Game'
             )
@@ -41881,6 +41930,11 @@ var Othello = function (_React$Component) {
               'div',
               null,
               this.getAlertMessage()
+            ),
+            _react2.default.createElement(
+              'div',
+              null,
+              this.noMoveAlertMessage()
             )
           )
         )
