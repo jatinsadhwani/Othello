@@ -1,6 +1,15 @@
 <div class="row index">
   <div class="col">
   	<h1 class="title"> Welcome to Othello!! </h1>
+  	<h3  class="title rules">Rules of the game</h3>
+  	<ul  class="title">
+	  	<li>Thou shalt enter your name to play the game</li>
+	  	<li>Thou shalt click a tile only if it has an adjacent tile of different color</li>
+	  	<li>Thou shalt try to score maximum tiles of your color</li>
+	  	<li>Thou shalt not click any anything if you are a spectator</li>
+	  	<li>Thou shalt not refresh the game upon joining the game as a player</li>
+	  	<li>Last but not the least, thou shalt HAVE FUN!!</li>
+  	</ul>
   	<div class="join">
     <h3 id="index-page" class="index-page">Enter a name to create a new game</h3>
     <h4 class="card-title"><input type="text" id="name" name="GameName"></h4>

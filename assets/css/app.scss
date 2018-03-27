@@ -76,11 +76,26 @@ a {
 }
 
 .join {
-    padding-top: 8%;
+    padding-top: 5%;
 }
 
 .title {
     color: #CDA96D;
+}
+
+.rules {
+    padding-top: 20px;
+    text-align: center;
+}
+
+ul {
+    display: block;
+    list-style-type: disc;
+    margin-top: 1em;
+    margin-bottom: 1 em;
+    margin-left: 27%;
+    margin-right: 0;
+    padding-left: 40px;
 }
 
 .dgButtons{
