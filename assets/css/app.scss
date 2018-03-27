@@ -39,17 +39,17 @@ html {
 }
 
 table {
-   border: 1px solid #CDA96D;
+   border: 1px solid white;
    box-sizing: initial;
 }
 
 .table td {
-    border-top: 1px solid #CDA96D;
+    border-top: 1px solid white;
 }
 
 th, td {
     
-    border-bottom: 1px solid #CDA96D;
+    border-bottom: 1px solid white;
 }
 
 .container {
@@ -58,12 +58,12 @@ th, td {
 
 .index-page {
     text-align: center;
-    color: #CDA96D;
+    color: white;
 }
 
 
 a {
-    background-color: #CDA96D;
+    background-color: white;
     color: black;
     padding: 10px 10px;
     text-align: center;
@@ -80,6 +80,10 @@ a {
 }
 
 .title {
+    color: white;
+}
+
+.gametitle {
     color: #CDA96D;
 }
 
@@ -89,12 +93,14 @@ a {
 }
 
 ul {
+    color: white;
     display: block;
     list-style-type: disc;
     margin-top: 1em;
     margin-bottom: 1 em;
     margin-left: 27%;
     margin-right: 0;
+    font-size: 20px;
     padding-left: 40px;
 }
 

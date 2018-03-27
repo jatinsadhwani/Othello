@@ -2,7 +2,7 @@
   <div class="col">
   	<h1 class="title"> Welcome to Othello!! </h1>
   	<h3  class="title rules">Rules of the game</h3>
-  	<ul  class="title">
+  	<ul>
 	  	<li>Thou shalt enter your name to play the game</li>
 	  	<li>Thou shalt click a tile only if it has an adjacent tile of different color</li>
 	  	<li>Thou shalt try to score maximum tiles of your color</li>
